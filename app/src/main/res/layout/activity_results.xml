@@ -211,7 +211,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView26" />
 
     <TextView
-        android:id="@+id/textView32"
+        android:id="@+id/price_won"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -232,15 +232,16 @@
         android:textSize="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView32" />
+        app:layout_constraintTop_toBottomOf="@+id/price_won" />
 
     <TextView
-        android:id="@+id/textView39"
+        android:id="@+id/actual_results_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:text="Actual Result"
+        android:textColor="@color/secondaryDark"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/results_number1" />
 
@@ -254,7 +255,7 @@
         android:textColor="@color/secondary"
         android:textSize="25dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView39" />
+        app:layout_constraintTop_toBottomOf="@+id/actual_results_info" />
 
     <TextView
         android:id="@+id/results_actual_number2"
@@ -266,7 +267,7 @@
         android:textColor="@color/secondary"
         android:textSize="25dp"
         app:layout_constraintStart_toEndOf="@+id/results_actual_number1"
-        app:layout_constraintTop_toBottomOf="@+id/textView39" />
+        app:layout_constraintTop_toBottomOf="@+id/actual_results_info" />
 
     <TextView
         android:id="@+id/results_actual_number3"
@@ -278,7 +279,7 @@
         android:textColor="@color/yellow"
         android:textSize="25dp"
         app:layout_constraintStart_toEndOf="@+id/results_actual_number2"
-        app:layout_constraintTop_toBottomOf="@+id/textView39" />
+        app:layout_constraintTop_toBottomOf="@+id/actual_results_info" />
 
     <TextView
         android:id="@+id/results_actual_number4"
@@ -290,7 +291,7 @@
         android:textColor="@color/secondary"
         android:textSize="25dp"
         app:layout_constraintStart_toEndOf="@+id/results_actual_number3"
-        app:layout_constraintTop_toBottomOf="@+id/textView39" />
+        app:layout_constraintTop_toBottomOf="@+id/actual_results_info" />
 
     <TextView
         android:id="@+id/results_actual_letter_symbol"
@@ -302,6 +303,6 @@
         android:textColor="@color/yellow"
         android:textSize="25dp"
         app:layout_constraintStart_toEndOf="@+id/results_actual_number4"
-        app:layout_constraintTop_toBottomOf="@+id/textView39" />
+        app:layout_constraintTop_toBottomOf="@+id/actual_results_info" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

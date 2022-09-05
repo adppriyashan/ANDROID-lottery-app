@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
         android:text="Developed By Lotto"
-        android:textSize="18dp"
+        android:textSize="15dp"
         android:textColor="@color/material_black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -59,6 +59,9 @@ public class Scan extends AppCompatActivity {
             } else {
                 String _qrCode=intentResult.getContents();
                 if(_qrCode.length()>4){
+                    Toast.makeText(this, _qrCode, Toast.LENGTH_SHORT).show();
+
+
 
                 }else{
                     Toast.makeText(this, "Invalid QR Code", Toast.LENGTH_SHORT).show();
@@ -95,7 +98,7 @@ public class Scan extends AppCompatActivity {
 
         ImageAnalysis imageAnalysis =
                 new ImageAnalysis.Builder()
-                        .setTargetResolution(new Size(1280, 720))
+                        .setTargetResolution(new Size(600, 600))
                         .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                         .build();
 

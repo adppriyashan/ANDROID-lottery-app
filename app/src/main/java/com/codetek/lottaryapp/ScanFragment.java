@@ -69,8 +69,6 @@ public class ScanFragment extends Fragment {
 //                    content="KOTIPATHI KAPRUKA 751 2021/08/31 0751086602786509 18 26 56 72 Q  www.dlb.lk";
 //                    Utils.scanned= new LotteryIdentification().checkLottery(view.getContext(),content);
 //                    startActivity(new Intent(view.getContext(), Results.class));
-                }else{
-                    Toast.makeText(view.getContext(), "Nothing", Toast.LENGTH_SHORT).show();
                 }
             }
         });

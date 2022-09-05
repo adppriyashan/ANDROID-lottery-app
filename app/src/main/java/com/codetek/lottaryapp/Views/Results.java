@@ -31,7 +31,7 @@ import java.util.Map;
 public class Results extends AppCompatActivity {
 
     private ImageView results_image,results_back;
-    private TextView results_ticket_name,results_drawer,results_seriel,results_date,results_number1,results_number2,results_number3,results_number4,results_letter_or_symbol,results_actual_number1,results_actual_number2,results_actual_number3,results_actual_number4,results_actual_letter_symbol,results_price;
+    private TextView results_ticket_name,price_won,results_drawer,results_seriel,actual_results_info,results_date,results_number1,results_number2,results_number3,results_number4,results_letter_or_symbol,results_actual_number1,results_actual_number2,results_actual_number3,results_actual_number4,results_actual_letter_symbol,results_price;
 
     RequestQueue queue;
 
@@ -58,6 +58,9 @@ public class Results extends AppCompatActivity {
         results_actual_number4=findViewById(R.id.results_actual_number4);
         results_actual_letter_symbol=findViewById(R.id.results_actual_letter_symbol);
         results_price=findViewById(R.id.results_price);
+        price_won=findViewById(R.id.price_won);
+
+        actual_results_info=findViewById(R.id.actual_results_info);
 
         results_ticket_name.setText(Utils.scanned.getName());
         results_drawer.setText(Utils.scanned.getDraw_no());
@@ -67,6 +70,18 @@ public class Results extends AppCompatActivity {
         results_number2.setText(Utils.scanned.getNumber2());
         results_number3.setText(Utils.scanned.getNumber3());
         results_number4.setText(Utils.scanned.getNumber4());
+
+        results_number1.setTextColor(getColor(R.color.primary));
+        results_number2.setTextColor(getColor(R.color.primary));
+        results_number3.setTextColor(getColor(R.color.primary));
+        results_number4.setTextColor(getColor(R.color.primary));
+        results_letter_or_symbol.setTextColor(getColor(R.color.primary));
+
+        results_actual_number1.setTextColor(getColor(R.color.primary));
+        results_actual_number2.setTextColor(getColor(R.color.primary));
+        results_actual_number3.setTextColor(getColor(R.color.primary));
+        results_actual_number4.setTextColor(getColor(R.color.primary));
+        results_actual_letter_symbol.setTextColor(getColor(R.color.primary));
 
         if(Utils.scanned.getLetter()==null){
             results_letter_or_symbol.setText(Utils.scanned.getSymbol());
@@ -90,6 +105,55 @@ public class Results extends AppCompatActivity {
                 try {
                     JSONObject jsonObject=new JSONObject(response);
                     results_price.setText(jsonObject.getString("price"));
+
+                    if(jsonObject.getBoolean("has_ticket")==true){
+                        JSONObject winningLottery=jsonObject.getJSONObject("ticket");
+
+                        actual_results_info.setText("Actual Result");
+                        actual_results_info.setTextColor(getColor(R.color.secondaryDark));
+                        results_actual_number1.setText(winningLottery.getString("number1"));
+                        results_actual_number2.setText(winningLottery.getString("number2"));
+                        results_actual_number3.setText(winningLottery.getString("number3"));
+                        results_actual_number4.setText(winningLottery.getString("number4"));
+                        results_actual_letter_symbol.setText(winningLottery.getString("letter"));
+
+                        if(Utils.scanned.getNumber1().equals(winningLottery.getString("number1"))){
+                            results_actual_number1.setTextColor(getColor(R.color.purple_200));
+                            results_number1.setTextColor(getColor(R.color.purple_200));
+                        }
+
+                        if(Utils.scanned.getNumber2().equals(winningLottery.getString("number2"))){
+                            results_actual_number2.setTextColor(getColor(R.color.purple_200));
+                            results_number2.setTextColor(getColor(R.color.purple_200));
+                        }
+
+                        if(Utils.scanned.getNumber3().equals(winningLottery.getString("number3"))){
+                            results_actual_number3.setTextColor(getColor(R.color.purple_200));
+                            results_number3.setTextColor(getColor(R.color.purple_200));
+                        }
+
+                        if(Utils.scanned.getNumber4().equals(winningLottery.getString("number4"))){
+                            results_actual_number4.setTextColor(getColor(R.color.purple_200));
+                            results_number4.setTextColor(getColor(R.color.purple_200));
+                        }
+
+                        if(Utils.scanned.getLetter().equals(winningLottery.getString("letter"))){
+                            results_actual_letter_symbol.setTextColor(getColor(R.color.purple_200));
+                            results_letter_or_symbol.setTextColor(getColor(R.color.purple_200));
+                        }
+
+                    }else{
+                        price_won.setVisibility(View.INVISIBLE);
+                        results_price.setVisibility(View.INVISIBLE);
+                        actual_results_info.setText("No Results Found");
+                        actual_results_info.setTextColor(getColor(R.color.purple_200));
+                        results_actual_number1.setVisibility(View.INVISIBLE);
+                        results_actual_number2.setVisibility(View.INVISIBLE);
+                        results_actual_number3.setVisibility(View.INVISIBLE);
+                        results_actual_number4.setVisibility(View.INVISIBLE);
+                        results_actual_letter_symbol.setVisibility(View.INVISIBLE);
+                    }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

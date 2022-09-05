@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,7 +46,7 @@ public class HomeFragment extends Fragment {
 
     TextView home_fragment_name,home_fragment_email;
 
-    ConstraintLayout dashboard_new_lottery;
+    ConstraintLayout dashboard_new_lottery,scan_lottery_btn;
 
     private RequestQueue queue;
 
@@ -80,12 +81,13 @@ public class HomeFragment extends Fragment {
     }
 
     private void getData() {
-        StringRequest sr = new StringRequest(Request.Method.POST, Utils.getApiUrl()+"history/generated/get", new Response.Listener<String>() {
+        StringRequest sr = new StringRequest(Request.Method.POST, Utils.getApiUrl()+"history/get", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 dataList.clear();
                 try {
-                    JSONArray dataArray=new JSONArray(response);
+                    JSONObject jsonObject=new JSONObject(response);
+                    JSONArray dataArray=jsonObject.getJSONArray("data");
                     for (int x=0;x<dataArray.length();x++){
                         JSONObject data= (JSONObject) dataArray.get(x);
                         dataList.add(new Lottery(data.getInt("id"), data.getString("name"),data.getString("drawno"),data.getString("number1"), data.getString("number2") , data.getString("number3"), data.getString("number4"),data.getString("letter") , data.getString("letter"), data.getString("serial"), data.getString("date"), (data.getInt("type")==2)?true:false , data.getDouble("price")));
@@ -108,6 +110,7 @@ public class HomeFragment extends Fragment {
             protected Map<String, String> getParams() {
                 Map<String,String> searchMap=new HashMap<>();
                 searchMap.put("user",String.valueOf(Utils.getUser().getId()));
+                searchMap.put("is_lotto","1");
                 return searchMap;
             }
         };
