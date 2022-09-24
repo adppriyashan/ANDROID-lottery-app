@@ -6,6 +6,8 @@ import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.codetek.lottaryapp.Models.DB.Lottery;
+import com.codetek.lottaryapp.Models.LotteryIdentification;
 import com.codetek.lottaryapp.Views.GetStart;
 import com.codetek.lottaryapp.Views.Login;
 
@@ -15,7 +17,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         initState();
     }
 

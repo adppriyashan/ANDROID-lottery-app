@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ import com.android.volley.toolbox.Volley;
 import com.codetek.lottaryapp.Adapters.HistoryAdapter;
 import com.codetek.lottaryapp.Models.DB.Lottery;
 import com.codetek.lottaryapp.Models.Utils;
+import com.codetek.lottaryapp.Views.Login;
 import com.codetek.lottaryapp.Views.NewLottery;
 import com.codetek.lottaryapp.Views.Results;
 import com.codetek.lottaryapp.Views.Scan;
@@ -45,6 +47,8 @@ public class HomeFragment extends Fragment {
     RecyclerView history_recycler_view;
 
     TextView home_fragment_name,home_fragment_email;
+
+    ImageView logout_btn;
 
     ConstraintLayout dashboard_new_lottery,scan_lottery_btn;
 
@@ -67,6 +71,14 @@ public class HomeFragment extends Fragment {
         home_fragment_name.setText(Utils.getUser().getName());
         home_fragment_email.setText(Utils.getUser().getEmail());
 
+        logout_btn=view.findViewById(R.id.logout_btn);
+        logout_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(view.getContext(), Login.class));
+            }
+        });
+
         dashboard_new_lottery=view.findViewById(R.id.dashboard_new_lottery);
         dashboard_new_lottery.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,7 +93,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void getData() {
-        StringRequest sr = new StringRequest(Request.Method.POST, Utils.getApiUrl()+"history/get", new Response.Listener<String>() {
+        StringRequest sr = new StringRequest(Request.Method.POST, Utils.getApiUrl()+"results/get", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 dataList.clear();

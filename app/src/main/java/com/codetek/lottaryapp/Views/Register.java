@@ -32,6 +32,8 @@ public class Register extends AppCompatActivity  implements Validator.Validation
     @NotEmpty
     private EditText register_name;
     @NotEmpty
+    private EditText register_mobile;
+    @NotEmpty
     @Email
     private EditText register_email;
     @Password(min = 6, scheme = Password.Scheme.ALPHA_NUMERIC_MIXED_CASE_SYMBOLS)
@@ -55,6 +57,7 @@ public class Register extends AppCompatActivity  implements Validator.Validation
 //        dataList2=Utils.getDistrictNameList();
 
         register_name=findViewById(R.id.register_name);
+        register_mobile=findViewById(R.id.register_mobile);
         register_email=findViewById(R.id.register_email);
         register_password=findViewById(R.id.register_password);
         register_retype_password=findViewById(R.id.register_retype_password);
@@ -82,6 +85,7 @@ public class Register extends AppCompatActivity  implements Validator.Validation
             register_button.setFocusable(true);
             Map<String,String> registerForm= new HashMap<String, String>();
             registerForm.put("name",register_name.getText().toString());
+            registerForm.put("mobile",register_mobile.getText().toString());
             registerForm.put("email",register_email.getText().toString());
             registerForm.put("password",register_password.getText().toString());
 

@@ -3,6 +3,7 @@ package com.codetek.lottaryapp.Views;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.android.volley.toolbox.Volley;
 import com.codetek.lottaryapp.Models.DB.Lottery;
 import com.codetek.lottaryapp.Models.DB.User;
 import com.codetek.lottaryapp.Models.Utils;
+import com.codetek.lottaryapp.Models.ZodanSymbols;
 import com.codetek.lottaryapp.R;
 
 import org.json.JSONException;
@@ -30,7 +32,7 @@ import java.util.Map;
 
 public class Results extends AppCompatActivity {
 
-    private ImageView results_image,results_back;
+    private ImageView results_image,results_back,results_letter_or_symbol_image,results_actual_letter_symbol_image;
     private TextView results_ticket_name,price_won,results_drawer,results_seriel,actual_results_info,results_date,results_number1,results_number2,results_number3,results_number4,results_letter_or_symbol,results_actual_number1,results_actual_number2,results_actual_number3,results_actual_number4,results_actual_letter_symbol,results_price;
 
     RequestQueue queue;
@@ -52,11 +54,13 @@ public class Results extends AppCompatActivity {
         results_number3=findViewById(R.id.results_number3);
         results_number4=findViewById(R.id.results_number4);
         results_letter_or_symbol=findViewById(R.id.results_letter_or_symbol);
+        results_letter_or_symbol_image=findViewById(R.id.results_letter_or_symbol_image);
         results_actual_number1=findViewById(R.id.results_actual_number1);
         results_actual_number2=findViewById(R.id.results_actual_number2);
         results_actual_number3=findViewById(R.id.results_actual_number3);
         results_actual_number4=findViewById(R.id.results_actual_number4);
         results_actual_letter_symbol=findViewById(R.id.results_actual_letter_symbol);
+        results_actual_letter_symbol_image=findViewById(R.id.results_actual_letter_symbol_image);
         results_price=findViewById(R.id.results_price);
         price_won=findViewById(R.id.price_won);
 
@@ -89,6 +93,16 @@ public class Results extends AppCompatActivity {
             results_letter_or_symbol.setText(Utils.scanned.getLetter());
         }
 
+        Drawable drawable= ZodanSymbols.getSymbol(results_letter_or_symbol.getText().toString(),this);
+
+        if(drawable!=null){
+            results_letter_or_symbol.setVisibility(View.INVISIBLE);
+            results_letter_or_symbol_image.setImageDrawable(drawable);
+        }else{
+            results_letter_or_symbol_image.setVisibility(View.INVISIBLE);
+            results_letter_or_symbol.setVisibility(View.VISIBLE);
+        }
+
         results_image.setImageDrawable(Lottery.getLotteryImage(this,Utils.scanned.getName()));
 
         results_back=findViewById(R.id.results_back);
@@ -117,6 +131,16 @@ public class Results extends AppCompatActivity {
                         results_actual_number4.setText(winningLottery.getString("number4"));
                         results_actual_letter_symbol.setText(winningLottery.getString("letter"));
 
+                        Drawable drawable= ZodanSymbols.getSymbol(winningLottery.getString("letter"),Results.this);
+
+                        if(drawable!=null){
+                            results_actual_letter_symbol.setVisibility(View.INVISIBLE);
+                            results_actual_letter_symbol_image.setImageDrawable(drawable);
+                        }else{
+                            results_actual_letter_symbol_image.setVisibility(View.INVISIBLE);
+                            results_actual_letter_symbol.setVisibility(View.VISIBLE);
+                        }
+
                         if(Utils.scanned.getNumber1().equals(winningLottery.getString("number1"))){
                             results_actual_number1.setTextColor(getColor(R.color.purple_200));
                             results_number1.setTextColor(getColor(R.color.purple_200));
@@ -144,6 +168,7 @@ public class Results extends AppCompatActivity {
 
                     }else{
                         price_won.setVisibility(View.INVISIBLE);
+                        results_actual_letter_symbol_image.setVisibility(View.INVISIBLE);
                         results_price.setVisibility(View.INVISIBLE);
                         actual_results_info.setText("No Results Found");
                         actual_results_info.setTextColor(getColor(R.color.purple_200));
@@ -167,13 +192,13 @@ public class Results extends AppCompatActivity {
                 if(error.networkResponse!=null && error.networkResponse.data!=null) {
                     try {
                         body = new String(error.networkResponse.data,"UTF-8");
-                        Log.println(Log.DEBUG,"debug", body);
+                        Toast.makeText(Results.this, body, Toast.LENGTH_SHORT).show();
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
                 }
                 if(error.networkResponse!=null && error.networkResponse.statusCode!=422){
-                    Log.println(Log.DEBUG,"debug", error.getMessage());
+                    Toast.makeText(Results.this, error.getMessage(), Toast.LENGTH_SHORT).show();
                 }else{
                 }
 

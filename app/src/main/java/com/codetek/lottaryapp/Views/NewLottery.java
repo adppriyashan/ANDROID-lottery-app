@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +45,8 @@ public class NewLottery extends AppCompatActivity {
 
     private Button generate_btn,generate_buy_btn;
     private EditText generate_number1,generate_number2,generate_number3,generate_number4,generate_letter;
+    private ImageView new_lottery_back_btn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +72,14 @@ public class NewLottery extends AppCompatActivity {
         generate_number3=findViewById(R.id.generate_number3);
         generate_number4=findViewById(R.id.generate_number4);
         generate_letter=findViewById(R.id.generate_letter);
+
+        new_lottery_back_btn=findViewById(R.id.new_lottery_back_btn);
+        new_lottery_back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         disableEditing();
 
@@ -120,6 +131,7 @@ public class NewLottery extends AppCompatActivity {
                         protected Map<String, String> getParams() {
                             Map<String, String> data=new HashMap<>();
                             data.put("date",selectedDate);
+                            data.put("user",String.valueOf(Utils.getUser().getId()));
                             return data;
                         }
                     };

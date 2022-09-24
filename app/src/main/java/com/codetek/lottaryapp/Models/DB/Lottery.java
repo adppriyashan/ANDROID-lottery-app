@@ -23,10 +23,13 @@ public class Lottery {
             return context.getDrawable(R.drawable.ada_kotipathi);
         }else if(lotteryName.toLowerCase().equals("KOTIPATHI KAPRUKA".toLowerCase())){
             return context.getDrawable(R.drawable.kotipathi_kapruka);
+        }else if(lotteryName.toLowerCase().equals("Dhana Nidhana".toLowerCase())){
+            return context.getDrawable(R.drawable.dhana_nidhanaya);
+        }else if(lotteryName.toLowerCase().equals("Govisetha".toLowerCase())){
+            return context.getDrawable(R.drawable.govisetha);
         }else{
             return context.getDrawable(R.drawable.lottary);
         }
-
     }
 
     public Lottery(int id, String name, String draw_no, String number1, String number2, String number3, String number4, String symbol, String letter, String serial, String date, boolean isLotto, double price) {

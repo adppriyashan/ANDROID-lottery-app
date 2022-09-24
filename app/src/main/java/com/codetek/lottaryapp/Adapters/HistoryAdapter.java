@@ -2,6 +2,7 @@ package com.codetek.lottaryapp.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.codetek.lottaryapp.Models.DB.Lottery;
+import com.codetek.lottaryapp.Models.ZodanSymbols;
 import com.codetek.lottaryapp.R;
 
 import java.util.ArrayList;
@@ -28,7 +30,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView result_ticket_image;
+        public ImageView result_ticket_image,result_ticket_symbol;
         public TextView result_ticket_name,result_ticket_draw,result_ticket_date,result_ticket_number1,result_ticket_number2,result_ticket_number3,result_ticket_number4,result_ticket_letter,result_ticket_price;
 
         public ViewHolder(View view) {
@@ -43,6 +45,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             result_ticket_number4 = view.findViewById(R.id.result_ticket_number4);
             result_ticket_letter = view.findViewById(R.id.result_ticket_letter);
             result_ticket_price = view.findViewById(R.id.result_ticket_price);
+            result_ticket_symbol=view.findViewById(R.id.result_ticket_symbol);
         }
     }
 
@@ -65,7 +68,18 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         holder.result_ticket_number2.setText(data.getNumber2());
         holder.result_ticket_number3.setText(data.getNumber3());
         holder.result_ticket_number4.setText(data.getNumber4());
-        holder.result_ticket_letter.setText(data.getLetter());
+
+        Drawable drawable= ZodanSymbols.getSymbol(data.getLetter(),context);
+
+        if(drawable!=null){
+            holder.result_ticket_letter.setVisibility(View.INVISIBLE);
+            holder.result_ticket_symbol.setImageDrawable(drawable);
+        }else{
+            holder.result_ticket_symbol.setVisibility(View.INVISIBLE);
+            holder.result_ticket_letter.setVisibility(View.VISIBLE);
+            holder.result_ticket_letter.setText(data.getLetter());
+        }
+
         holder.result_ticket_price.setText( (data.getPrice()==0.0)?"No Winnings":"LKR "+String.valueOf(data.getPrice()) );
         holder.result_ticket_image.setImageDrawable(Lottery.getLotteryImage(context, data.getName()));
 

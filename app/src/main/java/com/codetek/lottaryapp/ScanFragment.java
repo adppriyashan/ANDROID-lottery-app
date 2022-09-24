@@ -53,22 +53,19 @@ public class ScanFragment extends Fragment {
     private void initViews() {
         surfaceView = view.findViewById(R.id.surfaceView);
         scanNow =  view.findViewById(R.id.scan_now_button_new);
-//        scanNow.setEnabled(false);
+        scanNow.setEnabled(false);
+
+
+
         scanNow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("Result");
-
-                String content=intentData.replaceAll("[\\t\\n\\r]+"," ");
-                content="KOTIPATHI KAPRUKA 751 2021/08/31 0751086602786509 18 26 56 72 Q  www.dlb.lk";
-                Utils.scanned= new LotteryIdentification().checkLottery(view.getContext(),content);
-                startActivity(new Intent(view.getContext(), Results.class));
 
                 if (intentData.length() > 0) {
-//                    String content=intentData.replaceAll("[\\t\\n\\r]+"," ");
-//                    content="KOTIPATHI KAPRUKA 751 2021/08/31 0751086602786509 18 26 56 72 Q  www.dlb.lk";
-//                    Utils.scanned= new LotteryIdentification().checkLottery(view.getContext(),content);
-//                    startActivity(new Intent(view.getContext(), Results.class));
+                    String content=intentData.replaceAll("[\\t\\n\\r]+"," ");
+                    System.out.println(content);
+                    Utils.scanned= new LotteryIdentification().checkLottery(view.getContext(),content);
+                    startActivity(new Intent(view.getContext(), Results.class));
                 }
             }
         });
