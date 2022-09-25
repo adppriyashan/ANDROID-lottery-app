@@ -101,6 +101,7 @@ public class NewLottery extends AppCompatActivity {
                                 JSONObject responseObject=new JSONObject(response);
 
                                 if(responseObject.getInt("code")==200){
+                                    generate=true;
                                     JSONObject generatedNumbers=responseObject.getJSONObject("data");
                                     generate_number1.setText(String.valueOf(generatedNumbers.getInt("number1")));
                                     generate_number2.setText(String.valueOf(generatedNumbers.getInt("number2")));
@@ -147,54 +148,59 @@ public class NewLottery extends AppCompatActivity {
         generate_buy_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(selectedDate!=null){
-
-                    progress.setMessage("Please wait till reserve your ticket.");
-                    progress.show();
-                    StringRequest sr = new StringRequest(Request.Method.POST, Utils.getApiUrl()+"lottery/save", new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            progress.hide();
-                            try {
-                                JSONObject responseObject=new JSONObject(response);
-
-                                if(responseObject.getInt("code")==200){
-                                    Toast.makeText(getApplicationContext(), "Ticket Reserved", Toast.LENGTH_SHORT).show();
-                                    onBackPressed();
-                                }else{
-                                    Toast.makeText(NewLottery.this, responseObject.getString("message"), Toast.LENGTH_SHORT).show();
-                                }
-                            }catch(Exception e){
-                                e.printStackTrace();
-                            }
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            System.out.println(error.getMessage());
-                            progress.hide();
-                            Toast.makeText(NewLottery.this, "Server Error, Please try again", Toast.LENGTH_SHORT).show();
-                        }
-                    }) {
-                        @Override
-                        protected Map<String, String> getParams() {
-                            Map<String, String> data=new HashMap<>();
-                            data.put("number1",generate_number1.getText().toString());
-                            data.put("number2",generate_number2.getText().toString());
-                            data.put("number3",generate_number3.getText().toString());
-                            data.put("number4",generate_number4.getText().toString());
-                            data.put("letter",generate_letter.getText().toString());
-                            data.put("date",selectedDate);
-                            data.put("user",String.valueOf(Utils.getUser().getId()));
-
-                            return data;
-                        }
-                    };
-                    queue.add(sr);
-
+                if(generate==false){
+                    Toast.makeText(NewLottery.this, "Please generate new lottery after date changed", Toast.LENGTH_SHORT).show();
                 }else{
-                    disableEditing();
+                    if(selectedDate!=null && !generate_number1.getText().toString().isEmpty()){
+
+                        progress.setMessage("Please wait till reserve your ticket.");
+                        progress.show();
+                        StringRequest sr = new StringRequest(Request.Method.POST, Utils.getApiUrl()+"lottery/save", new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                progress.hide();
+                                try {
+                                    JSONObject responseObject=new JSONObject(response);
+
+                                    if(responseObject.getInt("code")==200){
+                                        Toast.makeText(getApplicationContext(), "Ticket Reserved", Toast.LENGTH_SHORT).show();
+                                        onBackPressed();
+                                    }else{
+                                        Toast.makeText(NewLottery.this, responseObject.getString("message"), Toast.LENGTH_SHORT).show();
+                                    }
+                                }catch(Exception e){
+                                    e.printStackTrace();
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                System.out.println(error.getMessage());
+                                progress.hide();
+                                Toast.makeText(NewLottery.this, "Server Error, Please try again", Toast.LENGTH_SHORT).show();
+                            }
+                        }) {
+                            @Override
+                            protected Map<String, String> getParams() {
+                                Map<String, String> data=new HashMap<>();
+                                data.put("number1",generate_number1.getText().toString());
+                                data.put("number2",generate_number2.getText().toString());
+                                data.put("number3",generate_number3.getText().toString());
+                                data.put("number4",generate_number4.getText().toString());
+                                data.put("letter",generate_letter.getText().toString());
+                                data.put("date",selectedDate);
+                                data.put("user",String.valueOf(Utils.getUser().getId()));
+
+                                return data;
+                            }
+                        };
+                        queue.add(sr);
+
+                    }else{
+                        disableEditing();
+                    }
                 }
+
             }
         });
     }
@@ -214,7 +220,9 @@ public class NewLottery extends AppCompatActivity {
         generate_number4.setEnabled(true);
         generate_letter.setEnabled(true);
     }
-
+    
+    public static boolean generate=false;
+    
     public static class DatePickerFragment extends DialogFragment
             implements DatePickerDialog.OnDateSetListener {
         @Override
@@ -233,6 +241,7 @@ public class NewLottery extends AppCompatActivity {
             System.out.println(selectedDate);
             try {
                 generate_date.setText(simpleDateFormat.format(simpleDateFormat.parse(selectedDate)));
+                generate=false;
             }catch(Exception exception){
                 exception.printStackTrace();
             }

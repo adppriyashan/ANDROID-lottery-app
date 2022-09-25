@@ -4,7 +4,7 @@ import com.codetek.lottaryapp.Models.DB.Lottery;
 import com.codetek.lottaryapp.Models.DB.User;
 
 public class Utils {
-    private static String baseUrl="http://192.168.1.170:8001/";
+    private static String baseUrl="http://192.168.1.170:8002/";
     private static String apiUrl=baseUrl+"api/";
     private static User user;
 

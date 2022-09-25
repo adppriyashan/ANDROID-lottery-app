@@ -22,10 +22,11 @@ import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 public class AuthController {
-    private ProgressDialog progress;
+
     private String url;
     public Context context;
     RequestQueue queue;
+    private ProgressDialog progress;
 
     public AuthController(Context context, String url){
         this.url=url;
@@ -35,33 +36,7 @@ public class AuthController {
     }
 
     public void doRegister(Map<String,String> data) {
-        progress.setMessage("Please wait");
-        progress.show();
-        StringRequest sr = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                progress.hide();
-                try {
-                    JSONObject responseObject=new JSONObject(response);
-                    Toast.makeText(context, responseObject.getString("message"), Toast.LENGTH_SHORT).show();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println(error.getMessage());
-                progress.hide();
-                Toast.makeText(context, "Server Error, Please try again", Toast.LENGTH_SHORT).show();
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                return data;
-            }
-        };
-        queue.add(sr);
+
     }
 
     public void doLogin(Map<String,String> data) {

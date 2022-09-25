@@ -1,5 +1,6 @@
 package com.codetek.lottaryapp.Views;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,6 +13,12 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.codetek.lottaryapp.Controllers.AuthController;
 import com.codetek.lottaryapp.Models.Utils;
 import com.codetek.lottaryapp.R;
@@ -21,6 +28,9 @@ import com.mobsandgeeks.saripaar.annotation.ConfirmPassword;
 import com.mobsandgeeks.saripaar.annotation.Email;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Password;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
@@ -79,22 +89,61 @@ public class Register extends AppCompatActivity  implements Validator.Validation
         });
     }
 
+    RequestQueue queue;
+    private ProgressDialog progress;
+
     @Override
     public void onValidationSucceeded() {
         try {
+
+            queue = Volley.newRequestQueue(this);
+            progress=new ProgressDialog(this);
+
             register_button.setFocusable(true);
-            Map<String,String> registerForm= new HashMap<String, String>();
-            registerForm.put("name",register_name.getText().toString());
-            registerForm.put("mobile",register_mobile.getText().toString());
-            registerForm.put("email",register_email.getText().toString());
-            registerForm.put("password",register_password.getText().toString());
 
-           new AuthController(this, Utils.getApiUrl()+"register").doRegister(registerForm);
 
-            register_name.setText("");
-            register_email.setText("");
-            register_password.setText("");
-            register_retype_password.setText("");
+            progress.setMessage("Please wait");
+            progress.show();
+            StringRequest sr = new StringRequest(Request.Method.POST, Utils.getApiUrl()+"register", new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    progress.hide();
+                    try {
+                        JSONObject responseObject=new JSONObject(response);
+                        Toast.makeText(Register.this, responseObject.getString("message"), Toast.LENGTH_SHORT).show();
+
+                        if( responseObject.getString("message").equals("Successfully registered")){
+                            register_name.setText("");
+                            register_email.setText("");
+                            register_password.setText("");
+                            register_retype_password.setText("");
+                            register_mobile.setText("");
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    System.out.println(error.getMessage());
+                    progress.hide();
+//                    Toast.makeText(Register.this, "Server Error, Please try again", Toast.LENGTH_SHORT).show();
+                }
+            }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String,String> registerForm= new HashMap<String, String>();
+                    registerForm.put("name",register_name.getText().toString());
+                    registerForm.put("mobile",register_mobile.getText().toString());
+                    registerForm.put("email",register_email.getText().toString());
+                    registerForm.put("password",register_password.getText().toString());
+                    return registerForm;
+                }
+            };
+            queue.add(sr);
+
 
         }catch (Exception e){
             e.printStackTrace();
