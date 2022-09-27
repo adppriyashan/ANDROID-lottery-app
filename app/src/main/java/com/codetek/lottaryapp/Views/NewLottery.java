@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -55,7 +56,7 @@ public class NewLottery extends AppCompatActivity {
 
         simpleDateFormat=new SimpleDateFormat("yyyy/MM/dd");
 
-        queue = Volley.newRequestQueue(this);
+
         progress=new ProgressDialog(this);
 
         generate_date=findViewById(R.id.generate_date);
@@ -88,6 +89,7 @@ public class NewLottery extends AppCompatActivity {
         generate_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                queue = Volley.newRequestQueue(NewLottery.this);
                 if(selectedDate!=null){
 
                     progress.setMessage("Please wait while we generating lottery.");
@@ -148,6 +150,10 @@ public class NewLottery extends AppCompatActivity {
         generate_buy_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                DefaultRetryPolicy  retryPolicy = new DefaultRetryPolicy(0, -1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+
+                queue = Volley.newRequestQueue(NewLottery.this);
                 if(generate==false){
                     Toast.makeText(NewLottery.this, "Please generate new lottery after date changed", Toast.LENGTH_SHORT).show();
                 }else{
@@ -161,7 +167,6 @@ public class NewLottery extends AppCompatActivity {
                                 progress.hide();
                                 try {
                                     JSONObject responseObject=new JSONObject(response);
-
                                     if(responseObject.getInt("code")==200){
                                         Toast.makeText(getApplicationContext(), "Ticket Reserved", Toast.LENGTH_SHORT).show();
                                         onBackPressed();
@@ -182,6 +187,9 @@ public class NewLottery extends AppCompatActivity {
                         }) {
                             @Override
                             protected Map<String, String> getParams() {
+
+
+
                                 Map<String, String> data=new HashMap<>();
                                 data.put("number1",generate_number1.getText().toString());
                                 data.put("number2",generate_number2.getText().toString());
@@ -194,6 +202,9 @@ public class NewLottery extends AppCompatActivity {
                                 return data;
                             }
                         };
+
+                        sr.setRetryPolicy(retryPolicy);
+
                         queue.add(sr);
 
                     }else{
